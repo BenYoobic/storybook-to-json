@@ -2,7 +2,7 @@ import { Component, Prop } from '@stencil/core';
 import { format } from '../../utils/utils';
 
 @Component({
-  tag: 'my-component',
+  tag: 'yoo-my-component',
   styleUrl: 'my-component.css',
   shadow: true
 })

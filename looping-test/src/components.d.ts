@@ -12,7 +12,20 @@ import '@stencil/core';
 
 export namespace Components {
 
-  interface MyComponent {
+  interface YooHelloComponent {
+    /**
+    * The first name
+    */
+    'personName': string;
+  }
+  interface YooHelloComponentAttributes extends StencilHTMLAttributes {
+    /**
+    * The first name
+    */
+    'personName'?: string;
+  }
+
+  interface YooMyComponent {
     /**
     * The first name
     */
@@ -26,7 +39,7 @@ export namespace Components {
     */
     'middle': string;
   }
-  interface MyComponentAttributes extends StencilHTMLAttributes {
+  interface YooMyComponentAttributes extends StencilHTMLAttributes {
     /**
     * The first name
     */
@@ -44,26 +57,36 @@ export namespace Components {
 
 declare global {
   interface StencilElementInterfaces {
-    'MyComponent': Components.MyComponent;
+    'YooHelloComponent': Components.YooHelloComponent;
+    'YooMyComponent': Components.YooMyComponent;
   }
 
   interface StencilIntrinsicElements {
-    'my-component': Components.MyComponentAttributes;
+    'yoo-hello-component': Components.YooHelloComponentAttributes;
+    'yoo-my-component': Components.YooMyComponentAttributes;
   }
 
 
-  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
-  var HTMLMyComponentElement: {
-    prototype: HTMLMyComponentElement;
-    new (): HTMLMyComponentElement;
+  interface HTMLYooHelloComponentElement extends Components.YooHelloComponent, HTMLStencilElement {}
+  var HTMLYooHelloComponentElement: {
+    prototype: HTMLYooHelloComponentElement;
+    new (): HTMLYooHelloComponentElement;
+  };
+
+  interface HTMLYooMyComponentElement extends Components.YooMyComponent, HTMLStencilElement {}
+  var HTMLYooMyComponentElement: {
+    prototype: HTMLYooMyComponentElement;
+    new (): HTMLYooMyComponentElement;
   };
 
   interface HTMLElementTagNameMap {
-    'my-component': HTMLMyComponentElement
+    'yoo-hello-component': HTMLYooHelloComponentElement
+    'yoo-my-component': HTMLYooMyComponentElement
   }
 
   interface ElementTagNameMap {
-    'my-component': HTMLMyComponentElement;
+    'yoo-hello-component': HTMLYooHelloComponentElement;
+    'yoo-my-component': HTMLYooMyComponentElement;
   }
 
 
