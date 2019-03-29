@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const process = require("process");
 
-const baseFolderLocation = "/Users/benyoobic/Documents/playground/looper/looping-test/src";
+const baseFolderLocation = "/Users/benyoobic/Documents/playground/storybook-to-json/looping-test/src";
+// const outputDirectory = "/json-outputs/";
 let results = [];
 let discards = [];
 
@@ -33,20 +34,28 @@ function walk(dir) {
  * Writes a file with all the results from the scrape
  */
 function writeIt() {
-    fs.writeFile('./allTsxElements.json', JSON.stringify(results), err => {
+    let fileName = './json-outputs/looper-output.json';
+    fs.writeFile(fileName, JSON.stringify(results), err => {
         if (err) {
             console.error('Err: ' + err);
         }
+
+
+
+
+
+
         console.log('File Written');
     }
-    )
+    );
 }
 
 /**
  * Reads the scrape results file
  */
 function readIt() {
-    fs.readFile('./allTsxElements.json', (err, data) => {
+    let fileName = './json-outputs/looper-output.json';
+    fs.readFile(fileName, (err, data) => {
         if (err) throw err;
         let parsedLinks = JSON.parse(data);
         console.log(parsedLinks);
@@ -55,8 +64,6 @@ function readIt() {
 
 function init() {
     walk(baseFolderLocation);
-    writeIt();
-    readIt();
 }
 
 init();
