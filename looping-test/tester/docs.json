@@ -1,0 +1,50 @@
+{
+  "timestamp": "2019-03-29T11:56:10",
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "0.16.2",
+    "typescriptVersion": "3.2.2"
+  },
+  "components": [
+    {
+      "tag": "my-component",
+      "docs": "",
+      "usage": {},
+      "props": [
+        {
+          "name": "first",
+          "type": "string",
+          "mutable": false,
+          "attr": "first",
+          "reflectToAttr": false,
+          "docs": "The first name",
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "last",
+          "type": "string",
+          "mutable": false,
+          "attr": "last",
+          "reflectToAttr": false,
+          "docs": "The last name",
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "middle",
+          "type": "string",
+          "mutable": false,
+          "attr": "middle",
+          "reflectToAttr": false,
+          "docs": "The middle name",
+          "optional": false,
+          "required": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "styles": []
+    }
+  ]
+}
