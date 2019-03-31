@@ -2,14 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const process = require("process");
 
-const baseFolderLocation = "/Users/benyoobic/Documents/playground/storybook-to-json/looping-test/src";
+const baseFolderLocation = "/Users/Ben/GitHub/storybook-to-json/looping-test/src";
 // const outputDirectory = "/json-outputs/";
 let results = [];
 let discards = [];
 
 /**
  * Walks though all the folders and sub folders in a given path
- * and extracts out all the files with .tsx and moves them into an array 
+ * and extracts out all the files with .tsx and moves them into an array
  */
 function walk(dir) {
     const EXTENSION = '.tsx';
@@ -31,6 +31,21 @@ function walk(dir) {
 }
 
 /**
+ * This function reads a given file and then stringifys the output
+ */
+function readFIle(){
+  results.forEach(fileLocation => {
+    fs.readFile(fileLocation, 'utf8', (err, fileContents) => {
+      if (err) {
+        console.log(`Error with reading file. Error message: ${err}`);
+      }
+      let fileContentsResult = JSON.stringify(fileContents);
+      console.log(fileContentsResult);
+    });
+  });
+}
+
+/**
  * Writes a file with all the results from the scrape
  */
 function writeIt() {
@@ -39,12 +54,6 @@ function writeIt() {
         if (err) {
             console.error('Err: ' + err);
         }
-
-
-
-
-
-
         console.log('File Written');
     }
     );
@@ -64,6 +73,7 @@ function readIt() {
 
 function init() {
     walk(baseFolderLocation);
+    readFIle();
 }
 
 init();
