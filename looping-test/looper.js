@@ -10,7 +10,7 @@ let discards = [];
 
 /**
  * Walks though all the folders and sub folders in a given path
- * and extracts out all the files with .tsx and moves them into an array 
+ * and extracts out all the files with .tsx and moves them into an array
  */
 function walk(dir) {
     const EXTENSION = '.tsx';
@@ -30,6 +30,21 @@ function walk(dir) {
         }
     });
     return results;
+}
+
+/**
+ * This function reads a given file and then stringifys the output
+ */
+function readFIle(){
+  results.forEach(fileLocation => {
+    fs.readFile(fileLocation, 'utf8', (err, fileContents) => {
+      if (err) {
+        console.log(`Error with reading file. Error message: ${err}`);
+      }
+      let fileContentsResult = JSON.stringify(fileContents);
+      console.log(fileContentsResult);
+    });
+  });
 }
 
 /**
@@ -71,6 +86,8 @@ function init() {
     };
     readIt();
     nameExtractor();
+    walk(baseFolderLocation);
+    readFIle();
 }
 
 init();
