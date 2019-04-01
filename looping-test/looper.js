@@ -1,31 +1,29 @@
 const fs = require('fs');
 const path = require('path');
 const process = require("process");
-const stencilOutput = require('./json-outputs/stencil-components-output.json');
 
+const stencilOutput = require('./json-outputs/stencil-components-output.json');
 const baseFolderLocation = "/Users/benyoobic/Documents/playground/storybook-to-json/looping-test/src";
 let results = [];
 let discards = [];
+let stringifiedFiles = [];
 
 
 /**
  * Walks though all the folders and sub folders in a given path
  * and extracts out all the files with .tsx and moves them into an array
  */
-function walk(dir) {
-    const EXTENSION = '.tsx';
+function walkThoughDirectories(dir) {
+    const extension = '.tsx';
     let list = fs.readdirSync(dir);
-
     list.forEach(file => {
         file = dir + '/' + file;
         let stat = fs.statSync(file);
-
         if (stat && stat.isDirectory()) {
-            discards = discards.concat(walk(file));
+            discards = discards.concat(walkThoughDirectories(file));
         } else {
-            if (path.extname(file).toLowerCase() === EXTENSION) {
-                let fileName = file.substring(file.lastIndexOf('/')+1).split('.').slice(0, -1).join('.');
-                results.push(fileName);
+            if (path.extname(file).toLowerCase() === extension) {
+                results.push(file);
             };
         }
     });
@@ -33,26 +31,29 @@ function walk(dir) {
 }
 
 /**
- * This function reads a given file and then stringifys the output
+ * This function reads a given file contents and then stringifys the output
  */
-function readFIle(){
-  results.forEach(fileLocation => {
-    fs.readFile(fileLocation, 'utf8', (err, fileContents) => {
-      if (err) {
-        console.log(`Error with reading file. Error message: ${err}`);
-      }
-      let fileContentsResult = JSON.stringify(fileContents);
-      console.log(fileContentsResult);
+function readFileContents() {
+    results.forEach(fileLocation => {
+        fs.readFile(fileLocation, 'utf8', (err, fileContents) => {
+            if (err) {
+                console.log(`Error with reading file. Error message: ${err}`);
+            }
+            let fileContentsResult = JSON.stringify(fileContents);
+            stringifiedFiles.push(fileContentsResult);
+            if (stringifiedFiles.length > 2) {
+                writeIt();
+            }
+        });
     });
-  });
 }
 
 /**
  * Writes a file with all the results from the scrape
  */
-function writeIt(a) {
+function writeIt() {
     let fileName = './json-outputs/looper-output.json';
-    fs.writeFile(fileName, JSON.stringify(results), err => {
+    fs.writeFile(fileName, '[' + stringifiedFiles + ']', err => {
         if (err) {
             console.error('Err: ' + err);
         }
@@ -61,33 +62,29 @@ function writeIt(a) {
     );
 }
 
-function nameExtractor() {
-    let a = stencilOutput.components.map(arr => {
-        return arr
-    });
-    console.log(a);
+function init() {
+    walkThoughDirectories(baseFolderLocation);
+    readFileContents();
 }
+
+init();
+
+// function nameExtractor() {
+//     let a = stencilOutput.components.map(arr => {
+//         return arr
+//     });
+//     console.log(a);
+// }
 
 /**
  * Reads the scrape results file
  */
-function readIt() {
-    let fileName = './json-outputs/looper-output.json';
-    fs.readFile(fileName, (err, data) => {
-        if (err) throw err;
-        let parsedLinks = JSON.parse(data);
-        console.log(parsedLinks);
-    });
-}
+// function readIt() {
+//     let fileName = './json-outputs/looper-output.json';
+//     fs.readFile(fileName, (err, data) => {
+//         if (err) throw err;
+//         let parsedLinks = JSON.parse(data);
+//         console.log(parsedLinks);
+//     });
+// }
 
-function init() {
-    if(walk(baseFolderLocation)) {
-        writeIt();
-    };
-    readIt();
-    nameExtractor();
-    walk(baseFolderLocation);
-    readFIle();
-}
-
-init();
