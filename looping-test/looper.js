@@ -4,6 +4,7 @@ const process = require("process");
 
 const stencilOutput = require('./json-outputs/stencil-components-output.json');
 const baseFolderLocation = "/Users/benyoobic/Documents/playground/storybook-to-json/looping-test/src";
+const outputFileName = './json-outputs/looper-output.json';
 let results = [];
 let discards = [];
 let stringifiedFiles = [];
@@ -52,29 +53,34 @@ function readFileContents() {
  * Writes a file with all the results from the scrape
  */
 function writeIt() {
-    let fileName = './json-outputs/looper-output.json';
-    fs.writeFile(fileName, '[' + stringifiedFiles + ']', err => {
+    fs.writeFile(outputFileName, '[' + stringifiedFiles + ']', err => {
         if (err) {
-            console.error('Err: ' + err);
+            console.log(`Error with writing file. Error message: ${err}`);
         }
         console.log('File Written');
     }
     );
 }
 
+/**
+ * This function takes the stencial build doc output and maps all the data from the json
+ * The idea of this function will be to pull out the right stuff from the stencil build doc
+ * to merge with what we pull out of each component
+ */
+function nameExtractor() {
+    let a = stencilOutput.components.map(arr => {
+        return arr
+    });
+    console.log(a);
+}
+
 function init() {
     walkThoughDirectories(baseFolderLocation);
     readFileContents();
+    nameExtractor();
 }
 
 init();
-
-// function nameExtractor() {
-//     let a = stencilOutput.components.map(arr => {
-//         return arr
-//     });
-//     console.log(a);
-// }
 
 /**
  * Reads the scrape results file
