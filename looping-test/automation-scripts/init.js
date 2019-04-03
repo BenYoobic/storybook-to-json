@@ -22,28 +22,18 @@ function walkThoughDirectories(dir) {
                 // pass
             } else if (file.includes('stories.tsx')) {
                 fs.readFile(file, 'utf8', (err, fileContents) => {
-                    console.log('here!')
-                    // 2. Pull out JS contnet
                     let stringifiedFile = JSON.stringify(fileContents);
+                    // stringifiedFile = stringifiedFile.replace("\n",""); trying to replace the \n newlines
+                    let nameStart = stringifiedFile.indexOf('yoo-');
+                    let nameEnd = stringifiedFile.indexOf('\')', nameStart);
+                    let componentName = stringifiedFile.substring(nameStart, nameEnd);
 
-                    // 3. find specific js elements needed
-                    let strArr = stringifiedFile.split(" ");
-                    let jsStart = strArr.indexOf('let');
-                    let jsEnd = strArr.indexOf('return');
-                    let tagNameStart = strArr.indexOf('createElement') + 2;
-                    let tagNameEnd = strArr.indexOf(')', tagNameStart) - 1;
-        
-                    // 4. make string of just the javascript portion of the story
-                    let onlyJsArr = [];
-                    onlyJsArr = strArr.slice(jsStart, jsEnd);
-                    let onlyJs = JSON.stringify(onlyJsArr.join().replace(/,/g, ' '));
-                    //  TODO -> error handling ie. if there is no js (empty string?)
-        
-                    // 5. add extra peice of js - document.body.appendChild(// specific element \\);
-                    let componentNameLocation = strArr.indexOf('let') + 1;
-                    let componentName = strArr[componentNameLocation];
-                    let finalJs = onlyJs.concat(`document.body.appendChild('yoo-${componentName}')`);
-                    finalJsString = finalJs;
+                    let concatString = `document.body.appendChild('${componentName}')`
+                    let jsStart = stringifiedFile.indexOf('let');
+                    let jsEnd = stringifiedFile.indexOf('return');
+                    let finalJs = stringifiedFile.substring(jsStart, jsEnd);
+                    finalJs += concatString;
+
                     if (finalJs !== null) {
                         writeJsonOutput(file);
                     }
