@@ -19,11 +19,12 @@ function walkThoughDirectories(dir) {
         if (stat && stat.isDirectory()) {
             discards = discards.concat(walkThoughDirectories(file));
         } else {
+            // TODO if stories.tsx.json exists - exclude!
             if (file.includes('stories.tsx')) {
                 fs.readFile(file, 'utf8', (err, fileContents) => {
                     // 2. Pull out JS contnet
                     let stringifiedFile = JSON.stringify(fileContents);
-                    // console.log("stringy file      " + JSON.parse(stringifiedFile))
+                    console.log("stringy file      " + JSON.parse(stringifiedFile))
 
                     // 3. find specific js elements needed
                     let strArr = stringifiedFile.split(" ");
