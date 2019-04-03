@@ -1,11 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+const frontifyApi = require('@frontify/frontify-api');
+
+const access_token = 'b1037465d568137bb9d3cc8e2b2dccccd11a6c56';
+const project = '192174';
+const baseUrl = 'https://design.yoobic.com';
 
 const currentPath = process.cwd();
 let usefulPath = currentPath.substring(0, currentPath.indexOf('/bin'));
 
 // const baseFolderLocation = `${usefulPath}/design-system/stencil/src`;
-const baseFolderLocation = '/Users/hannah/Documents/sandbox/storybook-to-json/looping-test/src'
+// const baseFolderLocation = '/Users/hannah/Documents/sandbox/storybook-to-json/looping-test/src';
+const baseFolderLocation = '/Users/benyoobic/Documents/playground/storybook-to-json/looping-test/src/components';
 let discards = [];
 let stringifiedFiles = [];
 
@@ -86,5 +92,15 @@ function writeJsonOutput(file, finalJs, finalHtml) {
     fs.writeFileSync(`${file}.json`, JSON.stringify(jsonObjectForFrontify));
 }
 
-walkThoughDirectories(baseFolderLocation);
-console.log("Script has run!");
+const sendToFrontify = () => {
+    frontifyApi.syncPatterns({ access_token, project, baseUrl }, ['./test-about.json']).catch(function (err) {
+        console.error('Frontify API Error:              ' + err);
+    });
+};
+
+
+// walkThoughDirectories(baseFolderLocation);
+// console.log("Script has run!");
+
+sendToFrontify();
+console.log('Send to frontify has run');
