@@ -3,7 +3,6 @@ const path = require('path');
 
 const baseFolderLocation = "/Users/hannah/Documents/sandbox/storybook-to-json/looping-test/src";
 let discards = [];
-// TODO we don't need discards to be stored! get rid!
 let stringifiedFiles = [];
 
 /**
@@ -19,16 +18,16 @@ function walkThoughDirectories(dir) {
         if (stat && stat.isDirectory()) {
             discards = discards.concat(walkThoughDirectories(file));
         } else {
-            // TODO if stories.tsx.json exists - exclude!
-            if (file.includes('stories.tsx')) {
+            if (path.extname(file).toLowerCase() === '.json') {
+                // pass
+            } else if (file.includes('stories.tsx')) {
                 fs.readFile(file, 'utf8', (err, fileContents) => {
+                    console.log('here!')
                     // 2. Pull out JS contnet
                     let stringifiedFile = JSON.stringify(fileContents);
-                    console.log("stringy file      " + JSON.parse(stringifiedFile))
 
                     // 3. find specific js elements needed
                     let strArr = stringifiedFile.split(" ");
-                    // console.log("stringifiedFile        " + stringifiedFile)
                     let jsStart = strArr.indexOf('let');
                     let jsEnd = strArr.indexOf('return');
                     let tagNameStart = strArr.indexOf('createElement') + 2;
@@ -44,7 +43,6 @@ function walkThoughDirectories(dir) {
                     let componentNameLocation = strArr.indexOf('let') + 1;
                     let componentName = strArr[componentNameLocation];
                     let finalJs = onlyJs.concat(`document.body.appendChild('yoo-${componentName}')`);
-                    console.log("final js!!!                 " + finalJs)
                     finalJsString = finalJs;
                     if (finalJs !== null) {
                         writeJsonOutput(file);
