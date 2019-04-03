@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const baseFolderLocation = "/Users/hannah/Documents/sandbox/storybook-to-json/looping-test/src";
+const currentPath = process.cwd();
+const baseFolderLocation = `${currentpath}/design-system/stencil/src`;
 let discards = [];
 let stringifiedFiles = [];
 
@@ -23,7 +24,6 @@ function walkThoughDirectories(dir) {
             } else if (file.includes('stories.tsx')) {
                 fs.readFile(file, 'utf8', (err, fileContents) => {
                     let stringifiedFile = JSON.stringify(fileContents);
-                    // stringifiedFile = stringifiedFile.replace("\n",""); trying to replace the \n newlines
                     let nameStart = stringifiedFile.indexOf('yoo-');
                     let nameEnd = stringifiedFile.indexOf('\')', nameStart);
                     let componentName = stringifiedFile.substring(nameStart, nameEnd);
