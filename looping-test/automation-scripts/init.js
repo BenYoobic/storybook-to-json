@@ -2,7 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 const currentPath = process.cwd();
-const baseFolderLocation = `${currentpath}/design-system/stencil/src`;
+let usefulPath = currentPath.substring(0, currentPath.indexOf('/bin'));
+
+// const baseFolderLocation = `${usefulPath}/design-system/stencil/src`;
+const baseFolderLocation = '/Users/hannah/Documents/sandbox/storybook-to-json/looping-test/src'
 let discards = [];
 let stringifiedFiles = [];
 
@@ -23,29 +26,37 @@ function walkThoughDirectories(dir) {
                 // pass
             } else if (file.includes('stories.tsx')) {
                 fs.readFile(file, 'utf8', (err, fileContents) => {
+                    // find js
                     let stringifiedFile = JSON.stringify(fileContents);
                     let nameStart = stringifiedFile.indexOf('yoo-');
                     let nameEnd = stringifiedFile.indexOf('\')', nameStart);
                     let componentName = stringifiedFile.substring(nameStart, nameEnd);
 
-                    let concatString = `document.body.appendChild('${componentName}')`
+                    let concatString = `document.body.appendChild('${componentName}')`;
                     let jsStart = stringifiedFile.indexOf('let');
                     let jsEnd = stringifiedFile.indexOf('return');
                     let finalJs = stringifiedFile.substring(jsStart, jsEnd);
                     finalJs += concatString;
 
-                    if (finalJs !== null) {
-                        writeJsonOutput(file, finalJs);
-                    }
+                    // find html
+                    let htmlStart = stringifiedFile.indexOf('<yoo')
+                    let htmlEnd = stringifiedFile.indexOf(`</${componentName}>`)
+                    let finalHtml = stringifiedFile.substring(htmlStart, htmlEnd);
+                    finalHtml += `</${componentName}>`
+
+                    writeJsonOutput(file, finalJs, finalHtml)
+
+                    // if (finalJs !== null) 
+                    //     writeJsonOutput(file, finalJs);
+                    
                 });
             };
         }
     });
-
 }
 
 
-function writeJsonOutput(file, finalJs) {
+function writeJsonOutput(file, finalJs, finalHtml) {
     let jsonObjectForFrontify = {
         "name": "Paragraph",
         "description": "Basic Paragraph",
@@ -65,17 +76,15 @@ function writeJsonOutput(file, finalJs) {
             }
         },
         "assets": {
-            "html": [
-                "test/fixtures/patterns/atoms/paragraph/paragraph.html"
-            ],
-            "css": [
-                "test/fixtures/patterns/atoms/paragraph/css/paragraph.css"
-            ],
+            "html": "",
+            "css": "",
             "js": ""
         }
     };
     jsonObjectForFrontify.assets.js = finalJs;
+    jsonObjectForFrontify.assets.html = finalHtml;
     fs.writeFileSync(`${file}.json`, JSON.stringify(jsonObjectForFrontify));
 }
 
-walkThoughDirectories(baseFolderLocation)
+walkThoughDirectories(baseFolderLocation);
+console.log("Script has run!");
