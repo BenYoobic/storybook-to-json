@@ -35,7 +35,7 @@ function walkThoughDirectories(dir) {
                     finalJs += concatString;
 
                     if (finalJs !== null) {
-                        writeJsonOutput(file);
+                        writeJsonOutput(file, finalJs);
                     }
                 });
             };
@@ -45,7 +45,7 @@ function walkThoughDirectories(dir) {
 }
 
 
-function writeJsonOutput(file) {
+function writeJsonOutput(file, finalJs) {
     let jsonObjectForFrontify = {
         "name": "Paragraph",
         "description": "Basic Paragraph",
@@ -74,7 +74,7 @@ function writeJsonOutput(file) {
             "js": ""
         }
     };
-    jsonObjectForFrontify.assets.js = finalJsString;
+    jsonObjectForFrontify.assets.js = finalJs;
     fs.writeFileSync(`${file}.json`, JSON.stringify(jsonObjectForFrontify));
 }
 
