@@ -17,18 +17,27 @@
     "test.watch": "stencil test --spec --e2e --watchAll",
     "docs-data": "stencil build --docs-json ./tester/docs.json",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "screenshot": "stencil test --e2e --screenshot"
   },
-  "dependencies": {},
+  "dependencies": {
+    "filehound": "^1.17.0",
+    "glob": "^7.1.3"
+  },
   "devDependencies": {
+    "@babel/core": "^7.4.0",
     "@stencil/core": "~0.16.2",
-    "@storybook/react": "^5.0.5",
     "@storybook/addon-actions": "^5.0.5",
     "@storybook/addon-links": "^5.0.5",
     "@storybook/addons": "^5.0.5",
-    "@babel/core": "^7.4.0",
+    "@storybook/html": "^5.0.5",
+    "@storybook/react": "^5.0.5",
+    "@types/jest": "23.3.14",
+    "@types/puppeteer": "1.12.3",
     "babel-loader": "^8.0.5",
-    "@storybook/html": "^5.0.5"
+    "jest": "23.6.0",
+    "jest-cli": "23.6.0",
+    "puppeteer": "1.8.0"
   },
   "license": "MIT"
 }
